@@ -1,9 +1,9 @@
 {
-    "name": "lovefc/PddApi",
+    "name": "lovefc/pddapi",
     "description": "拼多多基础api类",
     "keywords": ["php","pdd","拼多多基础api类"],
     "version": "0.0.1",
-    "homepage": "https://github.com/lovefc/PddApi.git",
+    "homepage": "https://github.com/lovefc/pddapi.git",
     "license": "MIT",
     "require": {
         "php": ">=5.3.0"
