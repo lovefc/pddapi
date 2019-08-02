@@ -47,3 +47,9 @@ $json = $obj->pdd_order_number_list_get($data);
 echo $json;
 
 ````
+
+### 交流讨论
+
+QQ群号：474310505
+
+![avatar](/qq.png)
