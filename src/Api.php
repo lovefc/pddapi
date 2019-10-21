@@ -1,11 +1,13 @@
 <?php
+
 namespace Pdd;
+
 /*
  * 拼多多公共基础类
  * @Author: lovefc 
  * @Date: 2019-07-15 08:30:21
  * @Last Modified by: lovefc
- * @Last Modified time: 2019-07-30 08:36:31
+ * @Last Modified time: 2019-10-21 11:47:55
  */
 
 class Api
@@ -32,6 +34,8 @@ class Api
 
     public $owner_name; //店铺名
 
+    public $api_url; // api接口
+
     // 构造函数
     public function __construct($config = '', $token_json = '')
     {
@@ -42,6 +46,7 @@ class Api
         if (!empty($token_json) && is_array($token_json)) {
             $this->arrToken($token_json);
         }
+        $this->api_url = 'https://gw-api.pinduoduo.com/api/router';
     }
 
     // 解析配置
@@ -51,7 +56,7 @@ class Api
         $this->client_secret = isset($config['client_secret']) ? $config['client_secret'] : '';
         $this->backurl = isset($config['backurl']) ? $config['backurl'] : '';
         $this->data_type = isset($config['data_type']) ? strtoupper($config['data_type']) : 'JSON';
-        $this->pdd_token_file = isset($config['pdd_token_file']) ? strtoupper($config['pdd_token_file']) : '';
+        $this->pdd_token_file = isset($config['pdd_token_file']) ? $config['pdd_token_file'] : '';
     }
 
     // token转数组
@@ -110,18 +115,16 @@ class Api
         );
         $data += $arr;
         $sign = $this->creSign($data);
-        $url = 'https://gw-api.pinduoduo.com/api/router';
         $data['sign'] = $sign;
-        $url = $url . '?' . http_build_query($data, null, '&');
-        return $url;
+        return $data;
     }
 
     // 提交请求
-    public function post($url, $data = '')
+    public function post($url, $data = '', $head = 'application/x-www-form-urlencoded')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type:application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type:{$head};charset=utf-8;"));
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
@@ -142,8 +145,9 @@ class Api
     // 组合提交
     public function submit($data)
     {
-        $url = $this->creQuery($data);
-        return $this->post($url);
+        $data = $this->creQuery($data);
+        $data = http_build_query($data, null, '&');
+        return $this->post($this->api_url, $data);
     }
 
     // 检测是否有接口权限
@@ -203,7 +207,8 @@ class Api
             "client_secret" => $this->client_secret,
         );
         $data = json_encode($data);
-        return $this->post($url, $data);
+        $head = 'application/json';
+        return $this->post($url, $data, $head);
     }
 
     //刷新token
@@ -218,7 +223,8 @@ class Api
             "state" => $state,
         );
         $data = json_encode($data);
-        return $this->post($url, $data);
+        $head = 'application/json';
+        return $this->post($url, $data, $head);
     }
 
     // 判断是否手机访问
