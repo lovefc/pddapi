@@ -157,15 +157,18 @@ class Api
             return true;
         }
         if (!in_array($name, $this->scope)) {
-            die("没有{$name}接口调用权限");
+            return false;
         }
+        return true;
     }
 
     // 魔术方法，自动判断接口权限并执行函数
     public function __call($method, $args)
     {
         $name =  str_replace('_', '.', $method);
-        $this->checkApi($name);
+        if($this->checkApi($name) === false){
+            die("没有{$name}接口调用权限");
+        }
         return $this->runPddApi($name, $args);
     }
 
