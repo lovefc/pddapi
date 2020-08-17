@@ -1,5 +1,5 @@
 {
-    "name": "lovefc/PddApi",
+    "name": "lovefc/pddapi",
     "description": "拼多多开放平台基础api类",
     "keywords": ["php","拼多多","拼多多开放平台","拼多多开放平台基础使用api类"],
     "version": "0.0.2",
