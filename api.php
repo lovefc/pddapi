@@ -12,11 +12,11 @@ $config = array(
       'client_secret' => 'xxxxxx', //client_secret
       'backurl' => 'xxxxx', //回调地址
       'data_type' => 'json', // 返回数据格式
-      'pdd_token_file' => __DIR__ . '/pdd_token.txt', // token存储文件地址
+      'pdd_token_file' => dirname(__FILE__) . '/pdd_token.txt', // token存储文件地址
 );
 
 // 加载公共文件,可以使用composer加载
-require __DIR__ . '/src/Api.php';
+require dirname(__FILE__) . '/src/Api.php';
 
 // 实例化参数，有两个，都是数组，第二个参数可以传授权后的token的json字符串，不传会读取token文件，建议授权后使用
 $obj = new Pdd\Api($config);
