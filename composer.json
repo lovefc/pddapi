@@ -16,6 +16,6 @@
       }
     ],
 	"autoload": {
-	   "psr-4": { "Taobao\\": "src"}
+	   "psr-4": { "Pdd\\": "src"}
 	}
 }
