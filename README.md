@@ -10,7 +10,7 @@ php封装的拼多多api类库，简单好用，配合文档食用，不用再�
 ````
 {
     "require": {
-        "lovefc/PddApi": "0.0.1"
+        "lovefc/PddApi": "0.0.2"
     }		
 }
 ````
