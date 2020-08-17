@@ -8,6 +8,7 @@ namespace Pdd;
  * @Date: 2019-07-15 08:30:21
  * @Last Modified by: lovefc
  * @Last Modified time: 2019-10-21 11:47:55
+ * @Last Modified time: 2020-07-21 09:34:45 
  */
 
 class Api
@@ -35,6 +36,8 @@ class Api
     public $owner_name; //店铺名
 
     public $api_url; // api接口
+	
+	public $poi_key; // 腾讯拉取位置信息的key
 
     // 构造函数
     public function __construct($config = '', $token_json = '')
@@ -57,6 +60,7 @@ class Api
         $this->backurl = isset($config['backurl']) ? $config['backurl'] : '';
         $this->data_type = isset($config['data_type']) ? strtoupper($config['data_type']) : 'JSON';
         $this->pdd_token_file = isset($config['pdd_token_file']) ? $config['pdd_token_file'] : '';
+        $this->poi_key = isset($config['poi_key']) ? $config['poi_key'] : '';		
     }
 
     // token转数组
@@ -136,7 +140,7 @@ class Api
         }
         $output = curl_exec($ch);
         if ($output === false) {
-            $this->error(curl_error($ch));
+            $this->error('接口错误'.curl_error($ch));
         }
         curl_close($ch);
         return $output;
@@ -167,7 +171,7 @@ class Api
     {
         $name =  str_replace('_', '.', $method);
         if($this->checkApi($name) === false){
-            die("没有{$name}接口调用权限");
+            $this->error("没有{$name}接口调用权限");
         }
         return $this->runPddApi($name, $args);
     }
@@ -198,7 +202,7 @@ class Api
         }
         return $url;
     }
-
+	
     //根据code取登录token
     public function getToken($code)
     {
@@ -270,8 +274,13 @@ class Api
     }
 
     //打印错误
-    public function error($error)
+    public function error($error,$error_code = 1)
     {
-        die('CURL Error:' . $error);
+       $error = array(
+	      'error_msg' => $error,
+	      'error_code' => $error_code
+
+       );		
+       die(json_encode($error));
     }
 }
